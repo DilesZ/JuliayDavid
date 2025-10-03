@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -163,6 +124,29 @@
             color: white !important;
             font-size: 0.9rem !important;
         }
+        #calendar-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #calendar-controls button {
+            background-color: #d65a7b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #calendar-controls button:hover {
+            background-color: #ff6f61;
+        }
+        #selected-event {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #d65a7b;
+        }
         footer {
             background-color: #d65a7b;
             color: white;
@@ -237,8 +221,12 @@
 
     <section id="calendario" class="fade-in">
         <h2>Nuestro Calendario</h2>
-        <p>Planeemos nuestras próximas aventuras juntos. Haz clic en una fecha para añadir una cita o evento especial.</p>
+        <p>Planeemos nuestras próximas aventuras juntos. Haz clic en una fecha para añadir una cita o evento especial. Selecciona un evento y usa el botón para borrarlo.</p>
         <div id="calendar"></div>
+        <div id="calendar-controls">
+            <p id="selected-event">Ningún evento seleccionado</p>
+            <button id="delete-event">Borrar Evento Seleccionado</button>
+        </div>
     </section>
 
     <section id="planes" class="fade-in">
@@ -276,6 +264,10 @@
         // Configuración del calendario
         document.addEventListener('DOMContentLoaded', function() {
             const calendarEl = document.getElementById('calendar');
+            const selectedEventEl = document.getElementById('selected-event');
+            const deleteButton = document.getElementById('delete-event');
+            let selectedEvent = null;
+
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
@@ -297,13 +289,24 @@
                     }
                 },
                 eventClick: function(info) {
-                    if (confirm(`¿Eliminar el evento "${info.event.title}"?`)) {
-                        info.event.remove();
-                        saveEvents();
-                    }
+                    selectedEvent = info.event;
+                    selectedEventEl.textContent = `Evento seleccionado: ${selectedEvent.title} (${selectedEvent.start.toLocaleDateString('es-ES')})`;
                 }
             });
             calendar.render();
+
+            deleteButton.addEventListener('click', function() {
+                if (selectedEvent) {
+                    if (confirm(`¿Eliminar el evento "${selectedEvent.title}"?`)) {
+                        selectedEvent.remove();
+                        selectedEventEl.textContent = 'Ningún evento seleccionado';
+                        selectedEvent = null;
+                        saveEvents();
+                    }
+                } else {
+                    alert('Por favor, selecciona un evento primero.');
+                }
+            });
 
             function saveEvents() {
                 const events = calendar.getEvents().map(event => ({

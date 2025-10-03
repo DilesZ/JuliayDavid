@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Julia y David - Nuestra Historia de Amor</title>
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
@@ -241,6 +244,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script>
+        // Evitar caché para imágenes
+        const images = document.querySelectorAll('img');
+        const timestamp = new Date().getTime();
+        images.forEach(img => {
+            img.src = img.src + '?t=' + timestamp;
+        });
+
         // Desplazamiento suave para los enlaces del menú
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {

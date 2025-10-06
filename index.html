@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -125,21 +86,35 @@
         }
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, minmax(150px, 1fr));
+            grid-template-rows: auto auto;
+            gap: 15px;
             padding: 20px;
+            justify-content: center;
         }
         .gallery img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+            border: 3px solid #d65a7b; /* Marco romántico */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .gallery img:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-color: #ff6f61; /* Cambio a color hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
+        /* Tamaños variados para un diseño más dinámico */
+        .gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; height: 300px; }
+        .gallery img:nth-child(2) { grid-column: span 1; grid-row: span 1; }
+        .gallery img:nth-child(3) { grid-column: span 1; grid-row: span 1; }
+        .gallery img:nth-child(4) { grid-column: span 1; grid-row: span 2; height: 300px; }
+        .gallery img:nth-child(5) { grid-column: span 1; grid-row: span 1; }
+        .gallery img:nth-child(6) { grid-column: span 1; grid-row: span 1; }
+        .gallery img:nth-child(7) { grid-column: span 2; grid-row: span 2; height: 300px; }
+        .gallery img:nth-child(8) { grid-column: span 1; grid-row: span 1; }
         #calendar {
             max-width: 900px;
             margin: 0 auto;
@@ -168,6 +143,21 @@
             opacity: 1;
             transform: translateY(0);
         }
+        @media (max-width: 900px) {
+            .gallery {
+                grid-template-columns: repeat(2, minmax(150px, 1fr));
+                grid-template-rows: auto;
+            }
+            .gallery img:nth-child(1), .gallery img:nth-child(4), .gallery img:nth-child(7) {
+                grid-column: span 2;
+                height: 250px;
+            }
+            .gallery img:nth-child(2), .gallery img:nth-child(3), .gallery img:nth-child(5),
+            .gallery img:nth-child(6), .gallery img:nth-child(8) {
+                grid-column: span 1;
+                height: 200px;
+            }
+        }
         @media (max-width: 600px) {
             header h1 {
                 font-size: 3rem;
@@ -190,6 +180,17 @@
             }
             #calendar iframe {
                 height: 400px; /* Ajuste para móviles */
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            .gallery img {
+                height: 200px;
+                border-width: 2px; /* Marco más delgado en móviles */
+            }
+            .gallery img:nth-child(1), .gallery img:nth-child(4), .gallery img:nth-child(7) {
+                grid-column: span 1;
+                height: 250px;
             }
         }
     </style>
@@ -227,6 +228,8 @@
             <img src="/JuliayDavid/IMG/IMG4.jpg" alt="Momento especial 4">
             <img src="/JuliayDavid/IMG/IMG5.jpg" alt="Momento especial 5">
             <img src="/JuliayDavid/IMG/IMG6.jpg" alt="Momento especial 6">
+            <img src="/JuliayDavid/IMG/IMG7.jpg" alt="Momento especial 7">
+            <img src="/JuliayDavid/IMG/IMG8.jpg" alt="Momento especial 8">
         </div>
     </section>
 
@@ -234,7 +237,7 @@
         <h2>Nuestro Calendario</h2>
         <p>Planeemos nuestras próximas aventuras juntos. Añade eventos en Google Calendar desde tu cuenta, ¡y se sincronizarán aquí automáticamente!</p>
         <div id="calendar">
-            <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Europe%2FMadrid&showPrint=0&src=anVsaWF5ZGF2aWQyMDA5MjAyNUBnbWFpbC5jb20&src=ZXMuc3BhaW4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039be5&color=%230b8043" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            <iframe src="https://calendar.google.com/calendar/embed?src=juliaydavid20092025%40gmail.com&ctz=Europe%2FMadrid" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
     </section>
 

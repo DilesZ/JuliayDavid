@@ -363,6 +363,10 @@
             margin-top: 30px;
             font-size: 1.2rem;
             color: #d65a7b;
+            transition: all 0.3s ease;
+        }
+        body.dark-mode .countdown {
+            color: #f9f5f2;
         }
         .message-form {
             margin-top: 40px;
@@ -444,6 +448,9 @@
             .heart-particle {
                 font-size: 15px;
             }
+            .countdown {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -505,7 +512,7 @@
             <iframe src="https://calendar.google.com/calendar/embed?src=juliaydavid20092025%40gmail.com&ctz=Europe%2FMadrid" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
         <div class="countdown">
-            Tiempo hasta nuestro aniversario: <span id="anniversary-countdown"></span>
+            Faltan <span id="anniversary-countdown"></span> para nuestro próximo aniversario. Llevamos <span id="years-together"></span> años juntos.
         </div>
     </section>
 
@@ -639,17 +646,30 @@
         }
         setInterval(createHeart, 1000);
 
-        // Countdown to anniversary (assuming anniversary is September 20, 2025)
-        const anniversaryDate = new Date('2025-09-20');
+        // Countdown to anniversary (20 September 2026, started 20 September 2025)
+        const anniversaryDate = new Date('2026-09-20');
+        const startDate = new Date('2025-09-20'); // Fecha inicial de la relación
         const countdownElement = document.getElementById('anniversary-countdown');
+        const yearsElement = document.getElementById('years-together');
         function updateCountdown() {
             const now = new Date();
-            const diff = anniversaryDate - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            // Calcular meses y días hasta el próximo aniversario
+            let months = (anniversaryDate.getFullYear() - now.getFullYear()) * 12 + (anniversaryDate.getMonth() - now.getMonth());
+            let days = anniversaryDate.getDate() - now.getDate();
+            if (days < 0) {
+                months--;
+                days += new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            }
+            if (months < 0) {
+                months += 12;
+            }
+            // Calcular años transcurridos desde el inicio
+            let years = now.getFullYear() - startDate.getFullYear();
+            if (now.getMonth() < startDate.getMonth() || (now.getMonth() === startDate.getMonth() && now.getDate() < startDate.getDate())) {
+                years--;
+            }
+            countdownElement.textContent = `${months} meses y ${days} días`;
+            yearsElement.textContent = years;
         }
         setInterval(updateCountdown, 1000);
 

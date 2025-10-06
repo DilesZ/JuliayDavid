@@ -512,7 +512,7 @@
             <iframe src="https://calendar.google.com/calendar/embed?src=juliaydavid20092025%40gmail.com&ctz=Europe%2FMadrid" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
         <div class="countdown">
-            Faltan <span id="anniversary-countdown"></span> para nuestro próximo aniversario. Llevamos <span id="years-together"></span> años juntos.
+            Llevamos <span id="anniversary-countdown"></span> juntos. Llevamos <span id="years-together"></span> años juntos.
         </div>
     </section>
 
@@ -646,24 +646,24 @@
         }
         setInterval(createHeart, 1000);
 
-        // Countdown to anniversary (20 September 2026, started 20 September 2025)
-        const anniversaryDate = new Date('2026-09-20');
+        // Countdown of time together (since 20 September 2025)
         const startDate = new Date('2025-09-20'); // Fecha inicial de la relación
         const countdownElement = document.getElementById('anniversary-countdown');
         const yearsElement = document.getElementById('years-together');
         function updateCountdown() {
             const now = new Date();
-            // Calcular meses y días hasta el próximo aniversario
-            let months = (anniversaryDate.getFullYear() - now.getFullYear()) * 12 + (anniversaryDate.getMonth() - now.getMonth());
-            let days = anniversaryDate.getDate() - now.getDate();
+            // Calcular meses y días desde el inicio
+            let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+            let days = now.getDate() - startDate.getDate();
             if (days < 0) {
                 months--;
-                days += new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
             }
             if (months < 0) {
-                months += 12;
+                months = 0;
+                days = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
             }
-            // Calcular años transcurridos desde el inicio
+            // Calcular años transcurridos
             let years = now.getFullYear() - startDate.getFullYear();
             if (now.getMonth() < startDate.getMonth() || (now.getMonth() === startDate.getMonth() && now.getDate() < startDate.getDate())) {
                 years--;

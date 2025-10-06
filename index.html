@@ -98,10 +98,10 @@
             align-items: center;
         }
         .swiper-slide img {
+            max-width: 600px;
+            max-height: 400px;
             width: 100%;
-            max-width: 400px;
-            height: 300px;
-            object-fit: cover;
+            height: auto; /* Respetar proporción original */
             border-radius: 15px;
             border: 3px solid #d65a7b; /* Marco romántico */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -175,8 +175,12 @@
         }
         @media (max-width: 900px) {
             .swiper-slide img {
-                max-width: 300px;
-                height: 200px;
+                max-width: 400px;
+                max-height: 300px;
+            }
+            .swiper {
+                slidesPerView: 2;
+                spaceBetween: 20;
             }
         }
         @media (max-width: 600px) {
@@ -204,8 +208,12 @@
             }
             .swiper-slide img {
                 max-width: 100%;
-                height: 200px;
+                max-height: 250px;
                 border-width: 2px; /* Marco más delgado en móviles */
+            }
+            .swiper {
+                slidesPerView: 1;
+                spaceBetween: 15;
             }
         }
     </style>
@@ -321,7 +329,9 @@
         const images = document.querySelectorAll('img');
         const timestamp = new Date().getTime();
         images.forEach(img => {
-            img.src = img.src + '?t=' + timestamp;
+            if (!img.src.includes('?t=')) {
+                img.src = img.src + '?t=' + timestamp;
+            }
         });
 
         // Desplazamiento suave para los enlaces del menú

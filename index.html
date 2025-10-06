@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>Julia y David - Nuestra Historia de Amor</title>
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@9.4.1/swiper-bundle.min.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -85,36 +86,65 @@
             font-size: 1.2rem;
         }
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(150px, 1fr));
-            grid-template-rows: auto auto;
-            gap: 15px;
             padding: 20px;
-            justify-content: center;
         }
-        .gallery img {
+        .swiper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-slide img {
             width: 100%;
-            height: 200px;
+            max-width: 400px;
+            height: 300px;
             object-fit: cover;
             border-radius: 15px;
             border: 3px solid #d65a7b; /* Marco romántico */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        .gallery img:hover {
+        .swiper-slide img:hover {
             transform: scale(1.05);
-            border-color: #ff6f61; /* Cambio a color hover */
+            border-color: #ff6f61;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
-        /* Tamaños variados para un diseño más dinámico */
-        .gallery img:nth-child(1) { grid-column: span 2; grid-row: span 2; height: 300px; }
-        .gallery img:nth-child(2) { grid-column: span 1; grid-row: span 1; }
-        .gallery img:nth-child(3) { grid-column: span 1; grid-row: span 1; }
-        .gallery img:nth-child(4) { grid-column: span 1; grid-row: span 2; height: 300px; }
-        .gallery img:nth-child(5) { grid-column: span 1; grid-row: span 1; }
-        .gallery img:nth-child(6) { grid-column: span 1; grid-row: span 1; }
-        .gallery img:nth-child(7) { grid-column: span 2; grid-row: span 2; height: 300px; }
-        .gallery img:nth-child(8) { grid-column: span 1; grid-row: span 1; }
+        .swiper-button-next, .swiper-button-prev {
+            color: #d65a7b;
+            transition: color 0.3s ease;
+        }
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            color: #ff6f61;
+        }
+        .swiper-pagination-bullet {
+            background: #d65a7b;
+        }
+        .swiper-pagination-bullet-active {
+            background: #ff6f61;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .upload-section input[type="file"] {
+            padding: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            border: 2px solid #d65a7b;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .upload-section input[type="file"]:hover {
+            border-color: #ff6f61;
+        }
+        .upload-section p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
         #calendar {
             max-width: 900px;
             margin: 0 auto;
@@ -144,17 +174,8 @@
             transform: translateY(0);
         }
         @media (max-width: 900px) {
-            .gallery {
-                grid-template-columns: repeat(2, minmax(150px, 1fr));
-                grid-template-rows: auto;
-            }
-            .gallery img:nth-child(1), .gallery img:nth-child(4), .gallery img:nth-child(7) {
-                grid-column: span 2;
-                height: 250px;
-            }
-            .gallery img:nth-child(2), .gallery img:nth-child(3), .gallery img:nth-child(5),
-            .gallery img:nth-child(6), .gallery img:nth-child(8) {
-                grid-column: span 1;
+            .swiper-slide img {
+                max-width: 300px;
                 height: 200px;
             }
         }
@@ -181,16 +202,10 @@
             #calendar iframe {
                 height: 400px; /* Ajuste para móviles */
             }
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-            .gallery img {
+            .swiper-slide img {
+                max-width: 100%;
                 height: 200px;
                 border-width: 2px; /* Marco más delgado en móviles */
-            }
-            .gallery img:nth-child(1), .gallery img:nth-child(4), .gallery img:nth-child(7) {
-                grid-column: span 1;
-                height: 250px;
             }
         }
     </style>
@@ -221,15 +236,24 @@
 
     <section id="momentos" class="gallery fade-in">
         <h2>Nuestros Momentos</h2>
-        <div>
-            <img src="/JuliayDavid/IMG/IMG1.jpg" alt="Momento especial 1">
-            <img src="/JuliayDavid/IMG/IMG2.jpg" alt="Momento especial 2">
-            <img src="/JuliayDavid/IMG/IMG3.jpg" alt="Momento especial 3">
-            <img src="/JuliayDavid/IMG/IMG4.jpg" alt="Momento especial 4">
-            <img src="/JuliayDavid/IMG/IMG5.jpg" alt="Momento especial 5">
-            <img src="/JuliayDavid/IMG/IMG6.jpg" alt="Momento especial 6">
-            <img src="/JuliayDavid/IMG/IMG7.jpg" alt="Momento especial 7">
-            <img src="/JuliayDavid/IMG/IMG8.jpg" alt="Momento especial 8">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG1.jpg" alt="Momento especial 1"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG2.jpg" alt="Momento especial 2"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG3.jpg" alt="Momento especial 3"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG4.jpg" alt="Momento especial 4"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG5.jpg" alt="Momento especial 5"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG6.jpg" alt="Momento especial 6"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG7.jpg" alt="Momento especial 7"></div>
+                <div class="swiper-slide"><img src="/JuliayDavid/IMG/IMG8.jpg" alt="Momento especial 8"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="upload-section">
+            <input type="file" id="upload-image" accept="image/*" multiple>
+            <p>Sube nuevas fotos aquí (se muestran temporalmente). Para añadirlas permanentemente, súbelas a la carpeta <code>/JuliayDavid/IMG/</code> en el repositorio con nombres como <code>IMG9.jpg</code> y actualiza el código.</p>
         </div>
     </section>
 
@@ -251,7 +275,48 @@
         <p>Con amor, Julia & David - Siempre juntos, siempre nosotros.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9.4.1/swiper-bundle.min.js"></script>
     <script>
+        // Inicializar Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 15,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                600: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                900: {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
+        // Manejar subida de imágenes
+        document.getElementById('upload-image').addEventListener('change', function(e) {
+            const files = e.target.files;
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const imgUrl = URL.createObjectURL(file);
+                    const slide = document.createElement('div');
+                    slide.classList.add('swiper-slide');
+                    slide.innerHTML = `<img src="${imgUrl}" alt="Momento subido">`;
+                    document.querySelector('.swiper-wrapper').appendChild(slide);
+                    swiper.update(); // Actualizar el slider
+                }
+            }
+        });
+
         // Evitar caché para imágenes
         const images = document.querySelectorAll('img');
         const timestamp = new Date().getTime();

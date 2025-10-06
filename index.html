@@ -512,7 +512,7 @@
             <iframe src="https://calendar.google.com/calendar/embed?src=juliaydavid20092025%40gmail.com&ctz=Europe%2FMadrid" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
         <div class="countdown">
-            Llevamos <span id="anniversary-countdown"></span> juntos. Llevamos <span id="years-together"></span> años juntos.
+            Llevamos <span id="anniversary-countdown"></span> juntos.
         </div>
     </section>
 
@@ -649,7 +649,6 @@
         // Countdown of time together (since 20 September 2025)
         const startDate = new Date('2025-09-20'); // Fecha inicial de la relación
         const countdownElement = document.getElementById('anniversary-countdown');
-        const yearsElement = document.getElementById('years-together');
         function updateCountdown() {
             const now = new Date();
             // Calcular meses y días desde el inicio
@@ -668,8 +667,19 @@
             if (now.getMonth() < startDate.getMonth() || (now.getMonth() === startDate.getMonth() && now.getDate() < startDate.getDate())) {
                 years--;
             }
-            countdownElement.textContent = `${months} meses y ${days} días`;
-            yearsElement.textContent = years;
+            // Construir el texto dinámicamente
+            let parts = [];
+            if (years > 0) {
+                parts.push(`${years} año${years > 1 ? 's' : ''}`);
+            }
+            if (months > 0) {
+                parts.push(`${months} mes${months > 1 ? 'es' : ''}`);
+            }
+            if (days > 0 || (years === 0 && months === 0)) {
+                parts.push(`${days} día${days !== 1 ? 's' : ''}`);
+            }
+            let text = parts.join(parts.length > 1 ? ' y ' : '');
+            countdownElement.textContent = text;
         }
         setInterval(updateCountdown, 1000);
 

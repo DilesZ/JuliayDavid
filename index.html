@@ -15,6 +15,11 @@
             background-color: #f9f5f2;
             color: #333;
             overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        body.dark-mode {
+            background-color: #2c2c2c;
+            color: #f9f5f2;
         }
         nav {
             position: fixed;
@@ -24,6 +29,11 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             padding: 10px 0;
+            transition: background 0.5s ease;
+        }
+        body.dark-mode nav {
+            background: rgba(44, 44, 44, 0.9);
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
         }
         nav ul {
             list-style: none;
@@ -56,16 +66,42 @@
             text-align: center;
             color: white;
             padding-top: 60px; /* Espacio para el menú fijo */
+            position: relative;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(214, 90, 123, 0.2));
+            z-index: 1;
+        }
+        header > div {
+            z-index: 2;
         }
         header h1 {
             font-family: 'Parisienne', cursive;
             font-size: 4.5rem;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInText 2s ease-in-out;
+        }
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         header p {
             font-size: 1.6rem;
             margin-top: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
         section {
             padding: 80px 20px;
@@ -73,20 +109,56 @@
             margin: 0 auto;
             text-align: center;
             min-height: 50vh;
+            position: relative;
+        }
+        section::after {
+            content: '♡';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #d65a7b;
+            opacity: 0.3;
         }
         section h2 {
             font-family: 'Parisienne', cursive;
             font-size: 2.8rem;
             color: #d65a7b;
             margin-bottom: 20px;
+            position: relative;
+        }
+        section h2::before {
+            content: '♥';
+            font-size: 1.5rem;
+            color: #ff6f61;
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         section p {
             line-height: 1.7;
             font-size: 1.2rem;
+            transition: color 0.5s ease;
+        }
+        body.dark-mode section p {
+            color: #f9f5f2;
         }
         .gallery {
             padding: 20px;
-            background: linear-gradient(135deg, #f9e8eb 0%, #fff5f5 100%); /* Fondo romántico */
+            background: linear-gradient(135deg, #f9e8eb 0%, #fff5f5 100%);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(214, 90, 123, 0.2);
+            transition: background 0.5s ease;
+        }
+        body.dark-mode .gallery {
+            background: linear-gradient(135deg, #4a2a3a 0%, #3a1a2a 100%);
         }
         .slider {
             position: relative;
@@ -171,6 +243,7 @@
             border-radius: 5px;
             background-color: #fff;
             cursor: pointer;
+            transition: border-color 0.3s ease;
         }
         .upload-section input[type="file"]:hover {
             border-color: #ff6f61;
@@ -179,11 +252,29 @@
             font-size: 0.9rem;
             color: #666;
             margin-top: 10px;
+            transition: color 0.5s ease;
+        }
+        body.dark-mode .upload-section p {
+            color: #ccc;
+        }
+        .upload-section input[type="file"] {
+            background-color: #fff;
+            transition: background-color 0.5s ease;
+        }
+        body.dark-mode .upload-section input[type="file"] {
+            background-color: #3a3a3a;
+            color: #f9f5f2;
         }
         #calendar {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(214, 90, 123, 0.2);
+            transition: box-shadow 0.5s ease;
+        }
+        body.dark-mode #calendar {
+            box-shadow: 0 0 20px rgba(255, 111, 97, 0.2);
         }
         #calendar iframe {
             width: 100%;
@@ -191,6 +282,10 @@
             border: 0;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.5s ease;
+        }
+        body.dark-mode #calendar iframe {
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
         }
         footer {
             background-color: #d65a7b;
@@ -198,6 +293,10 @@
             text-align: center;
             padding: 30px;
             font-size: 1.1rem;
+            transition: background-color 0.5s ease;
+        }
+        body.dark-mode footer {
+            background-color: #ff6f61;
         }
         .fade-in {
             opacity: 0;
@@ -208,10 +307,108 @@
             opacity: 1;
             transform: translateY(0);
         }
-        @media (max-width: 900px) {
-            .slider-slide img {
-                max-width: 400px; /* Escalar para pantallas medianas */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #d65a7b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            transition: background 0.3s ease;
+            z-index: 1000;
+        }
+        .dark-mode-toggle:hover {
+            background: #ff6f61;
+        }
+        .romantic-quote {
+            margin-top: 40px;
+            font-style: italic;
+            color: #d65a7b;
+            font-size: 1.1rem;
+            border-left: 4px solid #ff6f61;
+            padding-left: 20px;
+            animation: fadeInText 2s ease-in-out;
+        }
+        .heart-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            color: #d65a7b;
+            opacity: 0.5;
+            animation: floatHeart 10s linear infinite;
+        }
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.5;
             }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .countdown {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: #d65a7b;
+        }
+        .message-form {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message-form textarea {
+            padding: 10px;
+            border: 2px solid #d65a7b;
+            border-radius: 5px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        .message-form textarea:hover {
+            border-color: #ff6f61;
+        }
+        .message-form button {
+            background: #d65a7b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            transition: background 0.3s ease;
+        }
+        .message-form button:hover {
+            background: #ff6f61;
+        }
+        .message-display {
+            margin-top: 20px;
+            border-top: 1px solid #d65a7b;
+            padding-top: 20px;
+        }
+        .message-display p {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            transition: background 0.5s ease;
+        }
+        body.dark-mode .message-display p {
+            background: #3a3a3a;
+            color: #f9f5f2;
         }
         @media (max-width: 600px) {
             header h1 {
@@ -244,10 +441,16 @@
                 padding: 8px;
                 font-size: 1.2rem;
             }
+            .heart-particle {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="heart-particles"></div>
+    <button class="dark-mode-toggle" id="dark-mode-toggle">Modo Oscuro</button>
+
     <nav>
         <ul>
             <li><a href="#inicio">Inicio</a></li>
@@ -269,6 +472,7 @@
         <h2>Nuestra Historia</h2>
         <p>Todo comenzó en un día soleado cuando nuestros caminos se cruzaron por casualidad. Desde entonces, cada momento juntos ha sido una aventura llena de risas, sueños y amor incondicional. Esta es nuestra historia, y estamos emocionados de poder vivir un amor tan bonito</p>
         <p>Aquí puedes añadir más detalles sobre cómo nos conocimos, nuestros momentos favoritos o cualquier anécdota especial.</p>
+        <div class="romantic-quote">"El amor es como el viento, no se ve pero se siente." - Nicholas Sparks</div>
     </section>
 
     <section id="momentos" class="gallery fade-in">
@@ -300,12 +504,22 @@
         <div id="calendar">
             <iframe src="https://calendar.google.com/calendar/embed?src=juliaydavid20092025%40gmail.com&ctz=Europe%2FMadrid" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
+        <div class="countdown">
+            Tiempo hasta nuestro aniversario: <span id="anniversary-countdown"></span>
+        </div>
     </section>
 
     <section id="planes" class="fade-in">
         <h2>Nuestros Planes</h2>
         <p>El futuro nos espera con los brazos abiertos, y estamos emocionados por lo que viene. Desde viajar juntos por el mundo hasta construir un hogar lleno de amor, cada paso que damos es un sueño que compartimos.</p>
         <p>Aquí puedes añadir detalles sobre vuestros planes, como una boda, viajes, o cualquier meta que tengan juntos.</p>
+        <div class="romantic-quote">"El amor no mira con los ojos, sino con el alma." - William Shakespeare</div>
+        <div class="message-form">
+            <h3>Envíame un mensaje romántico</h3>
+            <textarea id="message-input" placeholder="Escribe tu mensaje aquí..." rows="4"></textarea>
+            <button id="send-message">Enviar</button>
+        </div>
+        <div class="message-display" id="message-display"></div>
     </section>
 
     <footer>
@@ -314,8 +528,8 @@
 
     <script>
         // Slider personalizado
-        const slider = document.querySelector('.slider-container');
-        const slides = document.querySelectorAll('.slider-slide');
+        let slider = document.querySelector('.slider-container');
+        let slides = document.querySelectorAll('.slider-slide');
         const prevBtn = document.querySelector('.slider-prev');
         const nextBtn = document.querySelector('.slider-next');
         const dotsContainer = document.querySelector('.slider-dots');
@@ -330,7 +544,7 @@
             dotsContainer.appendChild(dot);
         });
 
-        const dots = document.querySelectorAll('.slider-dot');
+        let dots = document.querySelectorAll('.slider-dot');
 
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -366,7 +580,7 @@
                     slider.appendChild(slide);
                     const dot = document.createElement('div');
                     dot.classList.add('slider-dot');
-                    dot.addEventListener('click', () => goToSlide(slides.length + dots.length));
+                    dot.addEventListener('click', () => goToSlide(slides.length + dots.length - 1));
                     dotsContainer.appendChild(dot);
                 }
             }
@@ -404,6 +618,54 @@
             });
         }, { threshold: 0.1 });
         fadeElements.forEach(element => observer.observe(element));
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Oscuro';
+        });
+
+        // Heart particles
+        const heartParticles = document.querySelector('.heart-particles');
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '♡';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+            heartParticles.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 1000);
+
+        // Countdown to anniversary (assuming anniversary is September 20, 2025)
+        const anniversaryDate = new Date('2025-09-20');
+        const countdownElement = document.getElementById('anniversary-countdown');
+        function updateCountdown() {
+            const now = new Date();
+            const diff = anniversaryDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        setInterval(updateCountdown, 1000);
+
+        // Message form
+        const messageInput = document.getElementById('message-input');
+        const sendMessage = document.getElementById('send-message');
+        const messageDisplay = document.getElementById('message-display');
+        sendMessage.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                const p = document.createElement('p');
+                p.textContent = message;
+                messageDisplay.appendChild(p);
+                messageInput.value = '';
+            }
+        });
     </script>
 </body>
 </html>

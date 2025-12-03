@@ -1,0 +1,70 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const db = require('./database');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+// Rutas de la API
+const authRoutes = require('./routes/authRoutes');
+const contentRoutes = require('./routes/contentRoutes');
+const imageRoutes = require('./routes/imageRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
+app.use('/api', authRoutes);
+app.use('/api/content', contentRoutes);
+app.use('/api/images', imageRoutes);
+app.use('/api/messages', messageRoutes);
+
+// Ruta raíz - servir index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
+});
+
+// Ruta admin
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'admin.html'));
+});
+
+// Manejo de errores global
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).json({
+        error: err.message || 'Error interno del servidor'
+    });
+});
+
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+    res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`
+╔═══════════════════════════════════════════════════════╗
+║                                                       ║
+║       ❤️  Julia y David - Servidor Activo  ❤️         ║
+║                                                       ║
+║   🌐 URL: http://localhost:${PORT}                     ║
+║   📁 Admin: http://localhost:${PORT}/admin             ║
+║                                                       ║
+║   👤 Usuario Julia - Password: julia2025             ║
+║   👤 Usuario David - Password: david2025             ║
+║                                                       ║
+╚═══════════════════════════════════════════════════════╝
+    `);
+});
+
+module.exports = app;
